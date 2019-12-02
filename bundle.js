@@ -166,7 +166,7 @@
       pathAStar = Object(
         __WEBPACK_IMPORTED_MODULE_0__path_js__["a" /* calculatePath */]
       )(map, startPos, targetPos, "astar");
-      
+
       // jquery for giving the #play a function on click
       $("#play").on("click", () => {
         runPath(
@@ -415,7 +415,7 @@
           });
         }
       } else if (algorithm === "astar") {
-
+        let priorityQueue = 
       }
       let optimal = buildOptimal(cameFrom, targetPos);
       return [path, optimal];
