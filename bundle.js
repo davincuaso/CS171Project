@@ -414,9 +414,10 @@
             }
           });
         }
-      } else if (algorithm === "astar") {
-        let priorityQueue = 
       }
+      // } else if (algorithm === "astar") {
+      //   let priorityQueue = 
+      // }
       let optimal = buildOptimal(cameFrom, targetPos);
       return [path, optimal];
     };
