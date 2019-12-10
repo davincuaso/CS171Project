@@ -358,6 +358,7 @@
       let path = [];
       let cameFrom = {};
       let current = startNode;
+      //if algorithm is dfs then it will instantiate a stack and push and pop until current id equals targetnode ID
       if (algorithm === "dfs") {
         let stack = new __WEBPACK_IMPORTED_MODULE_1__stack_js__[
           "a" /* default */
