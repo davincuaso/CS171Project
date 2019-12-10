@@ -100,15 +100,15 @@
       let map = makeMap(maze, 25, 25);
       let rendererOne = makeRenderer(map, "bfs-graph", "white", "black");
       let rendererTwo = makeRenderer(map, "dfs-graph", "white", "black");
-      let rendererThree = makeRenderer(map, "astar-graph", "white", "black");
+      // let rendererThree = makeRenderer(map, "astar-graph", "white", "black");
       drawMap(rendererOne, map);
       drawMap(rendererTwo, map);
-      drawMap(rendererThree, map);
+      // drawMap(rendererThree, map);
       let startPos = "0,0";
       let targetPos = `${map.data.length - 1},${map.data.length - 1}`;
       let pathBFS = [];
       let pathDFS = [];
-      let pathAStar = [];
+      // let pathAStar = [];
 
       //this renders the bfs path
       drawPath(
@@ -143,29 +143,29 @@
       );
       
       //this renders the astar path
-      drawPath(
-        rendererThree,
-        makePoint(startPos),
-        map.cellWidth,
-        map.cellHeight,
-        "red"
-      );
-      drawPath(
-        rendererThree,
-        makePoint(targetPos),
-        map.cellWidth,
-        map.cellHeight,
-        "green"
-      );
+      // drawPath(
+      //   rendererThree,
+      //   makePoint(startPos),
+      //   map.cellWidth,
+      //   map.cellHeight,
+      //   "red"
+      // );
+      // drawPath(
+      //   rendererThree,
+      //   makePoint(targetPos),
+      //   map.cellWidth,
+      //   map.cellHeight,
+      //   "green"
+      // );
       pathBFS = Object(
         __WEBPACK_IMPORTED_MODULE_0__path_js__["a" /* calculatePath */]
       )(map, startPos, targetPos, "bfs");
       pathDFS = Object(
         __WEBPACK_IMPORTED_MODULE_0__path_js__["a" /* calculatePath */]
       )(map, startPos, targetPos, "dfs");
-      pathAStar = Object(
-        __WEBPACK_IMPORTED_MODULE_0__path_js__["a" /* calculatePath */]
-      )(map, startPos, targetPos, "astar");
+      // pathAStar = Object(
+      //   __WEBPACK_IMPORTED_MODULE_0__path_js__["a" /* calculatePath */]
+      // )(map, startPos, targetPos, "astar");
 
       // jquery for giving the #play a function on click
       $("#play").on("click", () => {
@@ -187,15 +187,15 @@
           startPos,
           targetPos
         );
-        runPath(
-          100,
-          pathAStar[0],
-          pathAStar[1],
-          rendererThree,
-          map,
-          startPos,
-          targetPos
-        );
+        // runPath(
+        //   100,
+        //   pathAStar[0],
+        //   pathAStar[1],
+        //   rendererThree,
+        //   map,
+        //   startPos,
+        //   targetPos
+        // );
       });
     };
 
@@ -327,12 +327,12 @@
       [1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1],
       [1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1],
       [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1],
-      [1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+      [1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
       [1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1],
       [1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
       [1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1],
-      [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+      [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1],
       [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1],
       [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0]
@@ -415,9 +415,6 @@
           });
         }
       }
-      // } else if (algorithm === "astar") {
-      //   let priorityQueue = 
-      // }
       let optimal = buildOptimal(cameFrom, targetPos);
       return [path, optimal];
     };

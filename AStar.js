@@ -1,63 +1,140 @@
+var astar = (function () {
 
-//for the generic algorithm
+    function Node(parent, x, y, manhattenDistance) {
+        this.parent = parent;
 
-class AStar {
+        this.x = x;
+        this.y = y;
 
-  constructor(start, end, grid){
-     this.grid = grid
-     this.matrixLenght = this.grid.length
-     this.nodes =[]
-     for(let i=0;i<grid.length;i++){
-       for(let j=0;j<grid[0].length;j++){
-         if(i==start[0] && j==start[1]){
-           this.start = new NodeElement(i, j, grid[i][j].difficulty, grid[i][j].wall, this)
-           this.nodes.push(this.start)
+        this.g = parent ? parent.g + 1 : 0;
+        this.h = manhattenDistance;
+        this.f = this.g + this.h;
+    }
 
-         } else if(i==end[0] && j==end[1]){
-           this.end = new NodeElement(i, j, grid[i][j].difficulty, grid[i][j].wall, this)
-           this.nodes.push(this.end)
+    function checkForCollision(map, x, y) {
+        var tile = map.getTile(x, y);
+        return tile == 1; // TODO this requires "map knowledge"
+    }
 
-         } else {
-           this.nodes.push(new NodeElement (i,j,grid[i][j].difficulty,grid[i][j].wall,this))
-         }
-       }
-     }
-     this.openQueue = [this.start]
-     this.alreadyChecked = []
-     this.optimalPath=[]
-   }
+    function manhattenDistance(x, y, endPosition) {
+        return Math.abs(x - endPosition.x) + Math.abs(y - endPosition.y);
+    }
 
-  startAlgorithm(){
-     this.openQueue[0].heuristicCalculation(this.openQueue[0])
-    while(this.openQueue.length>0 ){
-       if(this.openQueue[0]===this.end){
-         break
-       }
+    function getAdjacentSquares(map, startPosition, endPosition) {
+        let nodes = [];
 
-       let neighbours = this.openQueue[0].neighboursCalculation(this.openQueue)
-       let queue = this.openQueue
+        for (let x = -1; x <= 1; x++) {
+            for (let y = -1; y <= 1; y++) {
+                const posX = startPosition.x + x;
+                const posY = startPosition.y + y;
 
-       this.alreadyChecked.push(queue.shift())
+                if ((x == 0 && y == 0) || (x != 0 && y != 0)) {
+                    continue;
+                } else if (posX < map.cols && posY < map.rows && posX >= 0 && posY >= 0 && !checkForCollision(map, posX, posY)) {
+                    nodes.push(new Node(startPosition, posX, posY, manhattenDistance(posX, posY, endPosition)));
+                }
+            }
+        }
 
-       let newQueue = queue.concat(neighbours)
-       let sortedNeighbours = newQueue.sort(function(a, b){return a.heuristic — b.heuristic})
+        return nodes;
+    }
 
-       this.openQueue = sortedNeighbours
-     }
-     if(this.openQueue.length !== 0){this.retrieveOptimalPath(this.openQueue[0])}
-   }
+    function nodeWithLowestFScore(nodes) {
+        let lowestScore;
 
-  retrieveOptimalPath(node){
-     this.optimalPath.push(node)
-     if(node.through!==this.start){
-       this.retrieveOptimalPath(node.through)
+        for (let i = 0; i < nodes.length; i++) {
+            let node = nodes[i];
 
-     } else{
-       this.optimalPath.push(this.start)
-     }
-   }
+            if (!lowestScore) {
+                lowestScore = node;
+            }
 
-  eucledianDistance(node){
-     return Math.sqrt(Math.pow(Math.abs(node.row-this.end.row),2)+Math.pow(Math.abs(node.col-this.end.col),2))
-   }
-}
+            lowestScore = lowestScore.f < node.f ? lowestScore : node;
+        }
+
+        return lowestScore;
+    }
+
+    function doesListContainNode(node, closedList) {
+        for (let i = 0; i < closedList.length; i++) {
+            let item = closedList[i];
+            if (item.x == node.x && item.y == node.y) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    function updateNode(node, nodes) {
+        for (let i = 0; i < nodes.length; i++) {
+            let item = nodes[i];
+            if (item.x == nodes.x && item.y == nodes.y) {
+                item.parent = node;
+                item.h = node.h;
+            }
+        }
+    }
+
+    function flattenGraph(nodes) {
+
+        var flattenedNodes = [];
+
+        var currentNode = nodes;
+        while (currentNode != null) {
+            flattenedNodes.push(currentNode)
+            currentNode = currentNode.parent;
+        }
+
+        return flattenedNodes;
+    }
+
+    function search(map, startPos, endPos) {
+        let closedList = [];
+        let openList = [];
+
+        let endPosition = new Node(null, endPos.x, endPos.y, 0);
+        let startPosition = new Node(null, startPos.x, startPos.y, manhattenDistance(startPos.x, startPos.y,
+            endPosition));
+
+        closedList.push(startPosition);
+        openList = getAdjacentSquares(map, startPosition, endPosition);
+        let node = null;
+        while (openList.length > 0) {
+            node = nodeWithLowestFScore(openList);
+
+            // found it!
+            if (node.h === 0) {
+                return flattenGraph(node).reverse();
+            }
+
+            var index = openList.indexOf(node);
+            if (index == -1) {
+                alert("que?");
+            }
+
+            openList.splice(index, 1);
+            closedList.push(node);
+
+            let neighbours = getAdjacentSquares(map, node, endPosition);
+            for (var i = 0; i < neighbours.length; i++) {
+                let neighbour = neighbours[i];
+
+                if (doesListContainNode(neighbour, closedList)) {
+                    continue;
+                }
+
+                if (!doesListContainNode(neighbour, openList)) {
+                    openList.push(neighbour);
+                } else if (neighbour.f < node.f) {
+                    // update the parent and h score of the node in the open list
+                    updateNode(neighbour, openList);
+                }
+            }
+        }
+    }
+
+    return {
+        search: search
+    }
+})();
