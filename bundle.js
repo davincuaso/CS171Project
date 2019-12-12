@@ -389,7 +389,9 @@
             stack.pop();
           }
         }
-      } else if (algorithm === "bfs") {
+      } 
+      //if bfs then instantiate queue then loop through nodes being fed into it. If current node.id === target node.id then it stops
+      else if (algorithm === "bfs") {
         let queue = new __WEBPACK_IMPORTED_MODULE_2__queue_js__[
           "a" /* default */
         ]();

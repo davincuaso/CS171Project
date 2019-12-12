@@ -6,6 +6,7 @@ var astar = (function () {
         this.x = x;
         this.y = y;
 
+        //if parent is true then parent.g + 1 if false then 0 -> the value of this.g
         this.g = parent ? parent.g + 1 : 0;
         this.h = manhattenDistance;
         this.f = this.g + this.h;
@@ -90,7 +91,9 @@ var astar = (function () {
     }
 
     function search(map, startPos, endPos) {
+        //what has been traversed
         let closedList = [];
+        //what is yet to be traversed
         let openList = [];
 
         let endPosition = new Node(null, endPos.x, endPos.y, 0);
@@ -109,11 +112,10 @@ var astar = (function () {
             }
 
             var index = openList.indexOf(node);
-            if (index == -1) {
-                alert("que?");
-            }
-
+            
+            //push one to index when node.h === 0 
             openList.splice(index, 1);
+            //pushes node to closedlist after meaning traversed
             closedList.push(node);
 
             let neighbours = getAdjacentSquares(map, node, endPosition);

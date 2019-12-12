@@ -98,8 +98,6 @@
             let routeSegment = route[i];
 
             drawCircle(ctx, routeSegment.x, routeSegment.y, 5, map.tSize, 'black');
-            //ctx.fillStyle = 'black';
-            //ctx.fillText(i, ((routeSegment.x * map.tSize) + 10), ((routeSegment.y * map.tSize) + (map.tSize / 2)));
         }
     }
 
@@ -109,8 +107,8 @@
 
         playerCanvasCtx.clearRect(0, 0, map.cols * map.tSize, map.rows * map.tSize);
 
-        drawCircle(playerCanvasCtx, startPos.x, startPos.y, 10, map.tSize, 'green');
-        drawCircle(playerCanvasCtx, endPos.x, endPos.y, 10, map.tSize, 'red');
+        drawCircle(playerCanvasCtx, startPos.x, startPos.y, 10, map.tSize, 'red');
+        drawCircle(playerCanvasCtx, endPos.x, endPos.y, 10, map.tSize, 'green');
     }
 
     function findRoute() {
